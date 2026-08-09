@@ -5,7 +5,7 @@ import {
   MinisomFormConfig,
   MinisomRepository,
 } from "./minisom.repository";
-import { connectPluricallDb } from "../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../shared/infra/db/connect-pluricall";
 
 export class MssqlMinisomRepository implements MinisomRepository {
   private truncate(value: any, max: number): string {
@@ -68,13 +68,29 @@ export class MssqlMinisomRepository implements MinisomRepository {
     `);
   }
 
+  private getLocalTimestamp(): string {
+    const now = new Date();
+
+    return (
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0") +
+      " " +
+      String(now.getHours()).padStart(2, "0") +
+      ":" +
+      String(now.getMinutes()).padStart(2, "0") +
+      ":" +
+      String(now.getSeconds()).padStart(2, "0")
+    );
+  }
+
   async insertAtLeadsCorporateRepository(
     data: InsertAtLeadsCorporateRepository,
   ): Promise<void> {
     const conn = await connectPluricallDb("onprem");
-
-    const now = new Date();
-    const timestamp = now.toISOString().replace("T", " ").replace("Z", "");
+    const timestamp = this.getLocalTimestamp();
 
     await conn
       .request()
@@ -166,8 +182,7 @@ export class MssqlMinisomRepository implements MinisomRepository {
   async insertAtLeadsRepository(data: InsertAtLeadsRepository): Promise<void> {
     try {
       const conn = await connectPluricallDb("onprem");
-      const now = new Date();
-      const timestamp = now.toISOString().replace("T", " ").replace("Z", "");
+      const timestamp = this.getLocalTimestamp();
       const result = await conn
         .request()
         .input("timestamp", timestamp)

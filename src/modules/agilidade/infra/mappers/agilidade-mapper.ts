@@ -11,7 +11,20 @@ export class AgilidadeMapper {
   }
 
   private static timestamp(): string {
-    return new Date().toISOString().replace("T", " ").replace("Z", "");
+    const now = new Date();
+    return (
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0") +
+      " " +
+      String(now.getHours()).padStart(2, "0") +
+      ":" +
+      String(now.getMinutes()).padStart(2, "0") +
+      ":" +
+      String(now.getSeconds()).padStart(2, "0")
+    );
   }
 
   static toPersistence(
@@ -20,7 +33,7 @@ export class AgilidadeMapper {
     requestUrl: string,
   ): AgilidadeMssqlRecord {
     return {
-      timestamp: new Date().toISOString().replace("T", " ").replace("Z", ""),
+      timestamp: this.timestamp(),
       request_ip: this.truncate(requestIp, 50),
       request_url: this.truncate(requestUrl, 300),
       gen_id: this.truncate(lead.genId, 70),

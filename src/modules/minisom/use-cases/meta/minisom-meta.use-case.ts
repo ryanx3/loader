@@ -1,7 +1,7 @@
 import { AlreadyExistsError } from "../../../../shared/errors/name-already-exists-error";
 import { NotFoundError } from "../../../../shared/errors/not-found-error";
-import { generateGenId } from "../../../../shared/utils/generate-gen-id";
-import { generateNormalizedPhonePT } from "../../../../shared/utils/generate-normalized-phone";
+import { generateGenId } from "../../../../shared/utils/generators/generate-gen-id";
+import { generateNormalizedPhonePT } from "../../../../shared/utils/generators/generate-normalized-phone";
 import { MinisomRepository } from "../../repositories/minisom.repository";
 import { MinisomMetaDTO } from "../../schemas/minisom-meta.schema";
 import { MinisomMetaUploadContactsUseCase } from "./queue";
@@ -78,16 +78,20 @@ export class MinisomMetaUseCase {
       leadStatus: "RECEIVED",
     });
 
-    this.minisomMetaUploadContacts.execute({
-      bd: bd.bd,
-      genId,
-      email: bodyRequest.email,
-      leadId: bodyRequest.lead_id,
-      name: bodyRequest.full_name,
-      phoneNumber: normalizedPhoneNumber,
-      contactList: this.CONTACTLIST,
-      campaign: this.CAMPAIGN,
-    });
+    this.minisomMetaUploadContacts
+      .execute({
+        bd: bd.bd,
+        genId,
+        email: bodyRequest.email,
+        leadId: bodyRequest.lead_id,
+        name: bodyRequest.full_name,
+        phoneNumber: normalizedPhoneNumber,
+        contactList: this.CONTACTLIST,
+        campaign: this.CAMPAIGN,
+      })
+      .catch((err) => {
+        console.error(`[minisomMeta] Falha ao enfileirar lead ${genId}:`, err);
+      });
 
     return { status: "OK", statusMsg: "Lead loaded with success.", genId };
   }

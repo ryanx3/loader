@@ -15,4 +15,5 @@ export interface AgilidadeUploadDTO {
   campaignName: string;
   formId: string;
   campaign: string;
+  leadSource: string;
 }

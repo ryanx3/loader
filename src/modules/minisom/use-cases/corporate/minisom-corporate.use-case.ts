@@ -1,5 +1,5 @@
-import { generateGenId } from "../../../../shared/utils/generate-gen-id";
-import { generateNormalizedPhonePT } from "../../../../shared/utils/generate-normalized-phone";
+import { generateGenId } from "../../../../shared/utils/generators/generate-gen-id";
+import { generateNormalizedPhonePT } from "../../../../shared/utils/generators/generate-normalized-phone";
 import { MinisomRepository } from "../../repositories/minisom.repository";
 import { MinisomCorporateDTO } from "../../schemas/minisom-corporate.schema";
 import { MinisomCorporateUploadContactsUseCase } from "./queue";
@@ -136,22 +136,29 @@ export class MinisomCorporateUseCase {
       lead_status: "RECEIVED",
     });
 
-    await this.minisomCorporateUploadContacts.execute({
-      adobeCampaignCode: bodyRequest.adobe_campaign_code,
-      phoneNumber: normalizedPhoneNumber,
-      name: fullName,
-      bd,
-      genId,
-      formTitle: bodyRequest.form_title || "",
-      marketingConsensusFlag: bodyRequest.marketing_consensus_flag || "",
-      privacyConsensusFlag: bodyRequest.privacy_consensus_flag || "",
-      address: bodyRequest.address || "",
-      email: bodyRequest.email || "",
-      campaign: this.CAMPAIGN,
-      contactList: this.CONTACTLIST,
-      origem: this.ORIGEM,
-      language: this.LANGUAGE,
-    });
+    await this.minisomCorporateUploadContacts
+      .execute({
+        adobeCampaignCode: bodyRequest.adobe_campaign_code,
+        phoneNumber: normalizedPhoneNumber,
+        name: fullName,
+        bd,
+        genId,
+        formTitle: bodyRequest.form_title || "",
+        marketingConsensusFlag: bodyRequest.marketing_consensus_flag || "",
+        privacyConsensusFlag: bodyRequest.privacy_consensus_flag || "",
+        address: bodyRequest.address || "",
+        email: bodyRequest.email || "",
+        campaign: this.CAMPAIGN,
+        contactList: this.CONTACTLIST,
+        origem: this.ORIGEM,
+        language: this.LANGUAGE,
+      })
+      .catch((err) => {
+        console.error(
+          `[minisomCorporate] Falha ao enfileirar lead ${genId}:`,
+          err,
+        );
+      });
 
     return { status: "OK", statusMsg: "", genId };
   }

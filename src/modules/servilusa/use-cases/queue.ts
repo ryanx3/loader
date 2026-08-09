@@ -1,5 +1,5 @@
 import { altitudeQueue } from "../../../shared/infra/queue/altitude/altitude-queue";
-import { generateDataload } from "../../../shared/utils/generate-dataload";
+import { generateDataload } from "../../../shared/utils/generators/generate-dataload";
 
 export interface ServilusaEncuesta {
   id: any;
@@ -39,6 +39,11 @@ export class Servilusa23081UploadContactsUseCase {
     if (Name === "FirstName" && typeof Value === "string") {
       Value = Value.substring(0, 100);
     }
+
+    if (Name === "MobilePhone" || Name === "HomePhone") {
+      Value = String(Value ?? "").slice(-9);
+    }
+
     return {
       discriminator: "DatabaseFields",
       Name,

@@ -18,6 +18,7 @@ export class AgilidadeLead {
   readonly adsetName: string;
   readonly campaignName: string;
   readonly formId: string;
+  readonly leadSource: string;
   readonly marca: string;
   readonly phoneNumber: string;
   readonly contactList: string;
@@ -50,6 +51,7 @@ export class AgilidadeLead {
     this.phoneNumber = props.phoneNumber;
     this.contactList = props.contactList;
     this.environment = props.environment;
+    this.leadSource = props.leadSource;
   }
 
   static validateToken(token: string): boolean {
@@ -97,6 +99,7 @@ export class AgilidadeLead {
       campaignName: dto.marca ?? "",
       formId: dto.formId ?? "",
       marca: dto.marca ?? "",
+      leadSource: dto.leadSource ?? "",
       phoneNumber,
       contactList: AgilidadeLead.resolveContactList(token),
       environment: AgilidadeLead.resolveEnvironment(token),

@@ -7,7 +7,7 @@ export async function getDrivesController(
   reply: FastifyReply,
 ) {
   try {
-    const { siteId } = request.query as { siteId: string };
+    const { siteId } = request.params as { siteId: string };
 
     const useCase = new GetDrivesUseCase(new SharepointRepository());
     const drives = await useCase.execute(siteId);

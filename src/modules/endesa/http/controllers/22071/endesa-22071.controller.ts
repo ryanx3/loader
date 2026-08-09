@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { GetRequestIpAndUrl } from "../../../../../shared/utils/get-request-and-url";
+import { GetRequestIpAndUrl } from "../../../../../shared/utils/network/get-request-and-url";
 import { makeEndesa22071UseCase } from "../../../application/factories/endesa-22071.factory";
 import {
   endesa22071Schema,

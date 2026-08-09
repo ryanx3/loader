@@ -1,6 +1,6 @@
-import { generateGenId } from "../../../shared/utils/generate-gen-id";
-import { generateNormalizedPhonePT } from "../../../shared/utils/generate-normalized-phone";
-import { ServilusaEncuestaSchema } from "../http/controllers/23081";
+import { generateGenId } from "../../../shared/utils/generators/generate-gen-id";
+import { generateNormalizedPhonePT } from "../../../shared/utils/generators/generate-normalized-phone";
+import { ServilusaEncuestaSchema } from "../http/controllers/servilusa-23081.controller";
 import { ServilusaRepository } from "../repositories/servilusa.repository";
 import { Servilusa23081UploadContactsUseCase } from "./queue";
 

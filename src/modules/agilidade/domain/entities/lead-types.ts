@@ -19,6 +19,7 @@ export interface AgilidadeLeadProps {
   formId: string;
   marca: string;
   phoneNumber: string;
+  leadSource: string;
   contactList: string;
   environment: LeadEnvironment;
 }

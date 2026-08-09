@@ -7,4 +7,9 @@ export interface ISharepointRepository {
   getDrives(siteId: string): Promise<Drive[]>;
   getFolders(driveId: string, folderPath?: string): Promise<Folder[]>;
   downloadFile(driveId: string, filePath: string): Promise<Buffer>;
+  uploadFile(params: {
+    driveId: string;
+    filePath: string;
+    fileBuffer: Buffer;
+  }): Promise<void>;
 }

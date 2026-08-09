@@ -20,7 +20,7 @@ export async function sendEmail({
     const transporter = nodemailer.createTransport({
       host: env.SMTP_HOST,
       port: Number(env.SMTP_PORT),
-      secure: true,
+      secure: false,
       auth: {
         user: env.SMTP_USER,
         pass: env.SMTP_PASS,
@@ -42,8 +42,7 @@ export async function sendEmail({
       attachments,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ E-mail enviado:", info.response);
+    await transporter.sendMail(mailOptions);
   } catch (err) {
     console.error("❌ Falha ao enviar e-mail:", err);
   }

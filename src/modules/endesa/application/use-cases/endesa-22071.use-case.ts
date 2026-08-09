@@ -1,5 +1,5 @@
-import { generateGenId } from "../../../../shared/utils/generate-gen-id";
-import { generateNormalizedPhonePT } from "../../../../shared/utils/generate-normalized-phone";
+import { generateGenId } from "../../../../shared/utils/generators/generate-gen-id";
+import { generateNormalizedPhonePT } from "../../../../shared/utils/generators/generate-normalized-phone";
 import { EndesaLeadDTO } from "../../domain/dtos/endesa-lead.dto";
 import { EndesaLead } from "../../domain/entities/lead";
 import { IEndesaRepository } from "../../domain/repositories/endesa-repository";

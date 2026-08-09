@@ -4,17 +4,18 @@ import { AltitudeAuthError } from "../../../errors/altitude-auth-error";
 import {
   AltitudeEnvironment,
   resolveAltitudeConfig,
-} from "../../../utils/resolve-altitude-config";
-
-interface AltitudeTokenResponse {
-  access_token: string;
-  expires_in: number;
-}
+} from "./utils/resolve-altitude-config";
 
 interface AltitudeAuthErrorResponse {
   error: string;
   error_description: string;
   error_uri: string | null;
+}
+
+interface AltitudeTokenResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
 }
 
 export class AltitudeAuthService {
@@ -32,16 +33,20 @@ export class AltitudeAuthService {
       return cached.token;
     }
 
+    this.tokens.delete(environment);
+
     const existing = this.loginPromises.get(environment);
     if (existing) return existing;
 
     const promise = this.login(environment);
     this.loginPromises.set(environment, promise);
 
-    const token = await promise;
-    this.loginPromises.delete(environment);
-
-    return token;
+    try {
+      const token = await promise;
+      return token;
+    } finally {
+      this.loginPromises.delete(environment);
+    }
   }
 
   private async login(environment: AltitudeEnvironment): Promise<string> {
@@ -88,8 +93,47 @@ export class AltitudeAuthService {
     }
   }
 
+  async refreshToken(
+    refreshToken: string,
+    environment: AltitudeEnvironment,
+  ): Promise<AltitudeTokenResponse> {
+    const config = resolveAltitudeConfig(environment);
+    const payload = new URLSearchParams({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+      instanceaddress: config.instance,
+    });
+
+    try {
+      const resp = await axios.post<AltitudeTokenResponse>(
+        `${config.baseUrl}/token`,
+        payload,
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+          timeout: 10000,
+        },
+      );
+
+      return resp.data;
+    } catch (err: any) {
+      if (axios.isAxiosError<AltitudeAuthErrorResponse>(err)) {
+        const data = err.response?.data;
+        throw new AltitudeAuthError(
+          err.response?.status ?? 500,
+          data?.error,
+          data?.error_description,
+          data,
+        );
+      }
+      throw new AltitudeAuthError(500, "unknown", err.message, err);
+    }
+  }
+
   invalidateToken(environment: AltitudeEnvironment): void {
-    this.tokens.delete(environment);
+    if (!this.loginPromises.has(environment)) {
+      this.tokens.delete(environment);
+    }
   }
 }
 

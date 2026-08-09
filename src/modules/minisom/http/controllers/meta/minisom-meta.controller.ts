@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { minisomMetaSchema } from "../../../schemas/minisom-meta.schema";
-import { GetRequestIpAndUrl } from "../../../../../shared/utils/get-request-and-url";
+import { GetRequestIpAndUrl } from "../../../../../shared/utils/network/get-request-and-url";
 import { AlreadyExistsError } from "../../../../../shared/errors/name-already-exists-error";
 import { NotFoundError } from "../../../../../shared/errors/not-found-error";
 import { makeMinisomMetaUseCase } from "../../../use-cases/factories/minisom-meta.factory";

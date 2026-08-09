@@ -111,10 +111,6 @@ export async function generateAndSendExcelReport(
       buffer: Buffer.from(excelBuffer),
     });
 
-    console.log(
-      `📊 Relatório Excel enviado para SharePoint: ${reportFolderPath}/${excelFileName}`,
-    );
-
     const localFilePath = path.join(process.cwd(), "reports", excelFileName);
     await fs.mkdir(path.dirname(localFilePath), { recursive: true });
     await workbook.xlsx.writeFile(localFilePath);

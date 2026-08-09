@@ -1,11 +1,15 @@
 import { altitudeQueue } from "../../../../../shared/infra/queue/altitude/altitude-queue";
-import { generateDataload } from "../../../../../shared/utils/generate-dataload";
+import { generateDataload } from "../../../../../shared/utils/generators/generate-dataload";
 import { AgilidadeLead } from "../../../domain/entities/lead";
 
 export class Agilidade24041UploadContactsUseCase {
   private buildField(Name: string, Value: any) {
     if (Name === "FirstName" && typeof Value === "string") {
       Value = Value.substring(0, 100);
+    }
+
+    if (Name === "MobilePhone" || Name === "HomePhone" || Name === "telefone") {
+      Value = String(Value ?? "").slice(-9);
     }
 
     return {
@@ -45,6 +49,7 @@ export class Agilidade24041UploadContactsUseCase {
           this.buildField("bd_form_id", lead.formId),
           this.buildField("plc_id", lead.genId),
           this.buildField("dataload", dataload),
+          this.buildField("bd_campaign_name", lead.leadSource),
         ],
       },
     };

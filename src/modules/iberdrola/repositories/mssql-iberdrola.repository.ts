@@ -1,4 +1,4 @@
-import { connectPluricallDb } from "../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../shared/infra/db/connect-pluricall";
 import {
   IberdrolaRepository,
   InsertAnswerParams,

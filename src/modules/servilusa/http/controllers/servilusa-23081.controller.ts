@@ -1,7 +1,7 @@
 import { parseString } from "xml2js";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { GetRequestIpAndUrl } from "../../../../shared/utils/get-request-and-url";
 import { makeServilusa23081UseCase } from "../../use-cases/factories/servilusa-23081.factory";
+import { GetRequestIpAndUrl } from "../../../../shared/utils/network/get-request-and-url";
 
 export interface ServilusaEncuestaSchema {
   id: string | number;

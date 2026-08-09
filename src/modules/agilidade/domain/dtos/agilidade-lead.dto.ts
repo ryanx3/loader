@@ -14,4 +14,5 @@ export interface AgilidadeLeadDTO {
   adsetName?: string;
   formId?: string;
   marca?: string;
+  leadSource?: string;
 }

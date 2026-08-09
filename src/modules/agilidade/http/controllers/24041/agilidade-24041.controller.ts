@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { GetRequestIpAndUrl } from "../../../../../shared/utils/get-request-and-url";
+import { GetRequestIpAndUrl } from "../../../../../shared/utils/network/get-request-and-url";
 import { UnauthorizedError } from "../../../../../shared/errors/unauthorized-error";
 import { makeAgilidade24041UseCase } from "../../../application/use-cases/factories/agilidade-24041.factory";
 import { agilidade24041Schema } from "../../schemas/agilidade-24041.schema";

@@ -43,6 +43,7 @@ export class PlenitudeAuthService {
         usuario: env.PLENITUDE_USER,
         pass: env.PLENITUDE_PASS,
         version: env.PLENITUDE_VERSION || "3.0.0",
+        pais: "pt",
       });
 
       if (resp.data.IdError !== 0) {

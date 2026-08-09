@@ -1,5 +1,5 @@
 import { AltitudeCreateContact } from "../../../shared/infra/providers/altitude/create-contact.service";
-import { generateDataload } from "../../../shared/utils/generate-dataload";
+import { generateDataload } from "../../../shared/utils/generators/generate-dataload";
 import { ServilusaRepository } from "../repositories/servilusa.repository";
 
 export interface ServilusaEncuesta {
@@ -44,6 +44,10 @@ export class Servilusa23081UploadContactsUseCase {
   private buildAltitudeField(Name: string, Value: any) {
     if (Name === "FirstName" && typeof Value === "string") {
       Value = Value.substring(0, 100);
+    }
+
+    if (Name === "MobilePhone" || Name === "HomePhone") {
+      Value = String(Value ?? "").slice(-9);
     }
     return {
       discriminator: "DatabaseFields",

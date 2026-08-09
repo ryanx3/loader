@@ -12,7 +12,7 @@ async function recordingCronJob() {
     const currentHour = now.toTimeString().slice(0, 5);
 
     const yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 87);
+    yesterday.setDate(now.getDate() - 1);
     const dateStr = yesterday.toISOString().split("T")[0];
 
     const { clientRecord } = await getClientRecordingsUseCase.execute();

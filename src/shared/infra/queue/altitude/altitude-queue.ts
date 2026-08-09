@@ -4,12 +4,11 @@ import { redisConnection } from "../connection";
 export const altitudeQueue = new Queue("altitude-create-contact", {
   connection: redisConnection,
   defaultJobOptions: {
-    attempts: 5,
+    attempts: 4,
     backoff: {
-      type: "exponential",
-      delay: 3000,
+      type: "custom",
     },
-    removeOnComplete: true,
+    removeOnComplete: { count: 500 },
     removeOnFail: false,
   },
 });

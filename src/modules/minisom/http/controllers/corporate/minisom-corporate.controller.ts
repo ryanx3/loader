@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { GetRequestIpAndUrl } from "../../../../../shared/utils/get-request-and-url";
+import { GetRequestIpAndUrl } from "../../../../../shared/utils/network/get-request-and-url";
 import { minisomCorporateSchema } from "../../../schemas/minisom-corporate.schema";
 import { makeMinisomCorporateUseCase } from "../../../use-cases/factories/minisom-corporate.factory";
 

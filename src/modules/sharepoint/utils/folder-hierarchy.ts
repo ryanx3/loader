@@ -1,4 +1,4 @@
-import client from "../../../shared/infra/services/sharePointClient";
+import client from "../../../shared/infra/providers/sharepoint/sharepoint-client";
 
 export async function folderHierarchy(driveId: string, path: string) {
   const partes = path.split("/");

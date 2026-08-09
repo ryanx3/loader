@@ -1,4 +1,4 @@
-import { connectPluricallDb } from "../../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../../shared/infra/db/connect-pluricall";
 import { EndesaLead } from "../../domain/entities/lead";
 import { IEndesaRepository } from "../../domain/repositories/endesa-repository";
 import { EndesaMapper } from "../mappers/endesa-mapper";

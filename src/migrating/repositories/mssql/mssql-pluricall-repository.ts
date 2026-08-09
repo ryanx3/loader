@@ -13,7 +13,7 @@ import {
   RecordingMetadata,
 } from "../types/pluricall-repository-types";
 import { PluricallRepository } from "../pluricall-repository";
-import { connectPluricallDb } from "../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../shared/infra/db/connect-pluricall";
 
 export class MssqlPluricallRepository implements PluricallRepository {
   async logPlenitudeCallCloud(data: LogPlenitudeCallCloud) {
@@ -102,7 +102,6 @@ export class MssqlPluricallRepository implements PluricallRepository {
 
     if (result.recordset.length === 0) return null;
 
-    // Mapeia client_name -> name
     return {
       id: result.recordset[0].id,
       name: result.recordset[0].client_name,
@@ -167,12 +166,10 @@ export class MssqlPluricallRepository implements PluricallRepository {
     await transaction.begin();
 
     try {
-      // Gera senha e hash
       const plainPassword =
         data.password ?? Math.random().toString(36).slice(-8);
       const passwordHash = await bcrypt.hash(plainPassword, 10);
 
-      // Inserção na tabela de clientes
       const insertClientResult = await transaction
         .request()
         .input("clientName", data.clientName)

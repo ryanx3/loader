@@ -77,6 +77,27 @@ const envSchema = z.object({
   PLENITUDE_USER: z.string(),
   PLENITUDE_PASS: z.string(),
   PLENITUDE_VERSION: z.string(),
+
+  AGILIDADE_API_USERNAME: z.string(),
+  AGILIDADE_API_PASSWORD: z.string(),
+
+  // FTPS GRAVAÇÕES
+  FTPS_INTERNAL_HOST: z.string(),
+  FTPS_INTERNAL_PORT: z.coerce.number().default(990),
+  FTPS_INTERNAL_USER: z.string(),
+  FTPS_INTERNAL_PASSWORD: z.string(),
+
+  // SFTP PLENITUDE (destino cliente)
+  SFTP_PLENITUDE_HOST: z.string(),
+  SFTP_PLENITUDE_PORT: z.coerce.number().default(22),
+  SFTP_PLENITUDE_USER: z.string(),
+  SFTP_PLENITUDE_PASSWORD: z.string(),
+
+  PLURICALL_PANTHER_DB_USER: z.string(),
+  PLURICALL_PANTHER_DB_PASSWORD: z.string(),
+  PLURICALL_PANTHER_DB_SERVER: z.string(),
+  PLURICALL_PANTHER_DB_PORT: z.coerce.number(),
+  PLURICALL_PANTHER_DB_DATABASE: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

@@ -5,7 +5,7 @@ import { CreateLeadMappingDTO } from "../../domain/dtos/create-lead-mapping.dto"
 import { ValidationError } from "../../../../shared/errors/validation-error";
 import { AlreadyExistsError } from "../../../../shared/errors/name-already-exists-error";
 import sql from "mssql";
-import { connectPluricallDb } from "../../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../../shared/infra/db/connect-pluricall";
 
 export interface CreateLeadConfigUseCaseDTO {
   lead: CreateLeadIntegrationDTO;

@@ -3,7 +3,7 @@ import {
   InsertAtServilusaLeadsRepository,
   ServilusaRepository,
 } from "./servilusa.repository";
-import { connectPluricallDb } from "../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../shared/infra/db/connect-pluricall";
 
 export class MssqlServilusaRepository implements ServilusaRepository {
   private truncate(value: any, max: number): string {

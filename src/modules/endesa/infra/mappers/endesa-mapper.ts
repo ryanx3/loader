@@ -9,13 +9,33 @@ export class EndesaMapper {
     return String(value).substring(0, maxLength);
   }
 
+  private static getLocalTimestamp(): string {
+    const now = new Date();
+
+    return (
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0") +
+      " " +
+      String(now.getHours()).padStart(2, "0") +
+      ":" +
+      String(now.getMinutes()).padStart(2, "0") +
+      ":" +
+      String(now.getSeconds()).padStart(2, "0")
+    );
+  }
+
   static toPersistence(
     lead: EndesaLead,
     requestIp: string,
     requestUrl: string,
   ) {
+    const timestamp = this.getLocalTimestamp();
+
     return {
-      timestamp: new Date().toISOString().replace("T", " ").replace("Z", ""),
+      timestamp,
       request_ip: this.truncate(requestIp, 50),
       request_url: this.truncate(requestUrl, 300),
       gen_id: this.truncate(lead.genId, 70),
@@ -36,10 +56,7 @@ export class EndesaMapper {
       comercializadora: this.truncate("", 80),
       titular_fatura: this.truncate("", 80),
       source: this.truncate("", 50),
-      data_integracao: new Date()
-        .toISOString()
-        .replace("T", " ")
-        .replace("Z", ""),
+      data_integracao: timestamp,
       formdata: JSON.stringify(lead),
     };
   }

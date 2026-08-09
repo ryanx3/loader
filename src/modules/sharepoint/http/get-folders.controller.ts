@@ -1,4 +1,3 @@
-// infra/http/controllers/getFoldersController.ts
 import { FastifyReply, FastifyRequest } from "fastify";
 import { SharepointRepository } from "../infra/repositories/sharepoint-repository";
 import { GetFoldersUseCase } from "../application/use-cases/get-folders.use-case";
@@ -8,13 +7,16 @@ export async function getFoldersController(
   reply: FastifyReply,
 ) {
   try {
-    const { driveId, folderPath } = request.query as {
+    const { driveId } = request.params as {
       driveId: string;
-      folderPath?: string;
+    };
+
+    const { path } = request.query as {
+      path?: string;
     };
 
     const useCase = new GetFoldersUseCase(new SharepointRepository());
-    const folders = await useCase.execute(driveId, folderPath);
+    const folders = await useCase.execute(driveId, path);
 
     return reply.send(folders);
   } catch (err: any) {

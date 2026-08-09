@@ -3,7 +3,7 @@ import { LeadMappingRepository } from "../../domain/repositories/lead-mapping-re
 import { LeadMappingMapper } from "../mappers/lead-mapping-mapper";
 import { CreateLeadMappingDTO } from "../../domain/dtos/create-lead-mapping.dto";
 import { LeadMappingRow } from "../types/lead-mapping-row";
-import { connectPluricallDb } from "../../../../shared/infra/db/pluricall-db";
+import { connectPluricallDb } from "../../../../shared/infra/db/connect-pluricall";
 
 export class MssqlLeadMappingRepository implements LeadMappingRepository {
   private poolPromise = connectPluricallDb("cloud");

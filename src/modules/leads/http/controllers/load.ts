@@ -16,17 +16,21 @@ export async function loadLeadController(
     const leads = schema.parse(request.body).leads;
     const client = (request as any).client;
 
-    const loadLeadsUseCase = makeLoadLeadUseCase();
-    const results = await loadLeadsUseCase.execute(client, leads);
-    const errors = results
-      .filter((r) => !r.success)
-      .map((r) => ({ lead: r.lead, error: r.error }));
+    reply.status(202).send({
+      message: "Leads received and being processed",
+      count: leads.length,
+    });
 
-    return reply.status(200).send({
-      total: results.length,
-      success: results.filter((r) => r.success).length,
-      failed: errors.length,
-      errors,
+    const loadLeadsUseCase = makeLoadLeadUseCase();
+    loadLeadsUseCase.execute(client, leads).catch((error) => {
+      if (error instanceof AltitudeApiError) {
+        request.log.error({ err: error }, `AltitudeApiError: ${error.message}`);
+        return;
+      }
+      request.log.error(
+        { err: error },
+        "Erro no processamento background de leads",
+      );
     });
   } catch (error) {
     if (error instanceof AltitudeApiError) {

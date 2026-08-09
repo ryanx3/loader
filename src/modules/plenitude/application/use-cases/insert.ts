@@ -10,10 +10,10 @@ export class PlenitudeInsert {
   ) {}
 
   async execute(digitalData: any) {
-    const endpoint = "/insertar/digital";
     let responsePayload = null;
     let statusCode = 200;
     let errorMessage: string | undefined;
+    let endpoint: string = "";
 
     try {
       const { token, idDistribuidor } =
@@ -26,10 +26,11 @@ export class PlenitudeInsert {
         ...digitalData,
       };
 
-      const insertUrl = `${this.plenitudeAuthService.getBaseUrlPublic()}/insertar/digital`;
-      const resp = await axios.post(insertUrl, payload);
+      endpoint = `${this.plenitudeAuthService.getBaseUrlPublic()}/insertar/digital`;
+      const resp = await axios.post(endpoint, payload);
 
       responsePayload = resp.data;
+
       statusCode = 200;
 
       return resp.data;
@@ -38,9 +39,11 @@ export class PlenitudeInsert {
         responsePayload = err.response.data;
         statusCode = err.response.status;
         errorMessage = err.message;
-      } else {
-        statusCode = 500;
-        errorMessage = err.message;
+
+        console.error("❌ Plenitude API error:", {
+          status: err.response.status,
+          data: err.response.data,
+        });
       }
       throw err;
     } finally {

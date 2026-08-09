@@ -1,10 +1,11 @@
 import { AltitudeCreateContact } from "../../../../shared/infra/providers/altitude/create-contact.service";
 import { AltitudeUploadContact } from "../../../../shared/infra/providers/altitude/upload-contact.service";
 import { AltitudeApiError } from "../../../../shared/errors/altitude-error";
-import { AltitudeEnvironment } from "../../../../shared/utils/resolve-altitude-config";
 import { LeadIntegration } from "../../domain/entities/lead-integration";
 import { LeadLogsRepository } from "../../domain/repositories/lead-logs-repository";
 import { LeadMappingRepository } from "../../domain/repositories/lead-mapping-repository";
+import { AltitudeEnvironment } from "../../../../shared/infra/providers/altitude/utils/resolve-altitude-config";
+import { generatePlcId } from "../../../../shared/utils/generators/generate-plc-id";
 
 export interface LeadLoadResult {
   lead: any;
@@ -53,6 +54,7 @@ export class LoadLeadsUseCase {
     leads: any[],
   ): Promise<LeadLoadResult[]> {
     const dataload = new Date().toISOString().split("T")[0];
+    const plc_id = generatePlcId();
 
     const mapping = await this.leadMappingRepository.findByLeadConfigId(
       client.id,
@@ -117,12 +119,25 @@ export class LoadLeadsUseCase {
         IsAnonymized: false,
       }));
 
+      const hasPlcId = mapping.some(
+        (m) => m.altitude_field === "plc_id" && normalizedLead[m.source_field],
+      );
+
       attributes.push({
         discriminator: "Attribute",
         Name: "dataload",
         Value: dataload,
         IsAnonymized: false,
       });
+
+      if (!hasPlcId) {
+        attributes.push({
+          discriminator: "Attribute",
+          Name: "plc_id",
+          Value: plc_id,
+          IsAnonymized: false,
+        });
+      }
 
       const payload = {
         campaignName: client.campaign_name,
@@ -202,6 +217,17 @@ export class LoadLeadsUseCase {
           Value: dataload,
           IsAnonymized: false,
         });
+
+        const hasPlcId = attributes.some((attr) => attr.Name === "plc_id");
+
+        if (!hasPlcId) {
+          attributes.push({
+            discriminator: "Attribute",
+            Name: "plc_id",
+            Value: plc_id,
+            IsAnonymized: false,
+          });
+        }
 
         return {
           originalLead: lead,
